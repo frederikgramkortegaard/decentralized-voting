@@ -3,6 +3,7 @@ pragma solidity ^0.8.9;
 
 // Uncomment this line to use console.log
 import "hardhat/console.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract Poll {
     address owner;
@@ -20,6 +21,7 @@ contract Poll {
     uint256 totalOptions;
     string mostVotes;
     uint256 endtime;
+    bool firstVoteExists;
 
     mapping(string => uint256) votes;
     mapping(address => bool) hasVoted;
@@ -88,8 +90,9 @@ contract Poll {
         require(isOption[_option], "Not a valid option");
         votes[_option]++;
 
-        if (votes[_option] >= votes[mostVotes]) {
+        if (!firstVoteExists || votes[_option] >= votes[mostVotes]) {
             mostVotes = _option;
+            firstVoteExists = true;
         }
 
         totalVotes++;
@@ -122,6 +125,42 @@ contract Poll {
     function getTotalVotes() external view returns (uint256) {
         return totalVotes;
     }
+
+    function getAllInfo()
+        external
+        view
+        returns (
+            string memory,
+            string[] memory,
+            uint256,
+            uint256,
+            string memory,
+            uint256
+        )
+    {
+        return (
+            question,
+            options,
+            totalVotes,
+            totalOptions,
+            mostVotes,
+            endtime
+        );
+    }
+
+    function prettyGetVotes() external view returns (string memory) {
+        string memory result = "";
+        for (uint256 i = 0; i < options.length; i++) {
+            result = string(
+                abi.encodePacked(
+                    result,
+                    Strings.toString(votes[options[i]]),
+                    ","
+                )
+            );
+        }
+        return result;
+    }
 }
 
 contract PollFactory {
@@ -137,8 +176,8 @@ contract PollFactory {
     ) external returns (address) {
         Poll poll = new Poll(_question, _options, _timelock);
         polls.push(poll);
-        emit PollCreated(address(poll));
         console.log("----- poll:", address(poll));
+        emit PollCreated(address(poll));
         return address(poll);
     }
 
@@ -152,6 +191,10 @@ contract PollFactory {
 
     function getPollsLength() external view returns (uint256) {
         return polls.length;
+    }
+
+    function getAddressOfPoll(uint256 _index) external view returns (address) {
+        return address(polls[_index]);
     }
 
     fallback() external payable {

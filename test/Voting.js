@@ -114,4 +114,15 @@ describe("Voting", function () {
 
   });
 
+  it("Info", async function () {
+    const { contractInstance } = await deployFixture();
+    const info = await contractInstance.getAllInfo();
+    console.log(info);
+
+    // Pretty get votes
+    const votes = await contractInstance.prettyGetVotes();
+    console.log(votes);
+
+  });
+
 });
