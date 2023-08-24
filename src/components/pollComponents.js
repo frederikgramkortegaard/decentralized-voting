@@ -1,8 +1,9 @@
 import React, { useState, useEffect, ref } from 'react';
+import { _initial_load } from '../blocklogic';
 
 const PollComponent = ({ question, options, votes, onVote }) => {
     return (
-        <div className="poll-container" style={{ backgroundColor: "lightgray", "width": "100%", margin: 10 }}>
+        <div className="poll-container" style={{ backgroundColor: "lightgray", "width": "25%", margin: 10 }}>
             <h2>{question}</h2>
             <ul>
                 {options.map((option, index) => (
@@ -43,20 +44,22 @@ const PollForm = ({ createPoll }) => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        createPoll(question, options);
+        await createPoll(question, options);
         // Reset the form
         setQuestion("");
         setOptions(["", ""]);
         setTotalOptions(2);
+        // Reload the polls
+        _initial_load()
 
     };
 
     return (
-        <div className="poll-form-container">
+        <div className="poll-form-container" style={{ backgroundColor: "lightgray", "width": "fit-content", margin: 10, padding: 10 }}>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="question">Question</label>
+                <label htmlFor="question">Question: </label>
                 <input
                     type="text"
                     name="question"
@@ -64,7 +67,7 @@ const PollForm = ({ createPoll }) => {
                     onChange={handleQuestionChange}
                     required
                 />
-                <label htmlFor="options">Options</label>
+                <br /><label htmlFor="options">Options: </label>
 
                 {options.map((option, index) => (
                     <input

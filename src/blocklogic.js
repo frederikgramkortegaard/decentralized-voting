@@ -83,7 +83,7 @@ async function _initial_load() {
         pollComponents.push(pollComponent)
     }
     root.render(
-        <ul>
+        <ul style={{ listStyleType: "none" }}>
             {pollComponents.map((pollComponent) => (
                 <li>{pollComponent}</li>
             ))}
