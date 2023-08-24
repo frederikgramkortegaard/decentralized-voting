@@ -1,8 +1,6 @@
 # Blockvote: Ethereum-Based Decentralized Voting Platform
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/frederikgramkortegaard/decentralized-voting/blob/master/LICENSE)
-
 [![CodeQL](https://github.com/frederikgramkortegaard/decentralized-voting/workflows/CodeQL/badge.svg)](https://github.com/frederikgram/https://github.com/frederikgramkortegaard/decentralized-voting/actions?query=workflow%3ADependency+Review)
-
 [![Dependency Review](https://github.com/frederikgramkortegaard/decentralized-voting/workflows/Dependency%20Review/badge.svg)]()
 Blockvote is a decentralized voting platform built on the Ethereum blockchain, utilizing smart contracts powered by Web3 and Solidity. This project aims to provide a secure and transparent way for conducting digital voting while ensuring immutability and tamper resistance.
 
