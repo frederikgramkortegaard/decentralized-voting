@@ -43,12 +43,22 @@ async function votePoll(pollAddress, option) {
     console.log("Voting on poll...")
     const signer = await provider.getSigner();
     const contract = await _establish_connection(pollAddress, pollArtifact.abi, signer)
+
+    // Check that the option is valid
+    const options = await contract.getOptions()
+    if (!options.includes(option)) {
+        throw new Error("Invalid option")
+    }
+
+
     const tx = await contract.vote(option)
     await tx.wait()
     console.log("Voted on poll at address: ", pollAddress, " with option: ", option)
     // Print the total votes for each option
     const votes = await contract.prettyGetVotes()
     console.log("Votes: ", votes)
+
+    _initial_load()
 }
 
 async function getPollComponentFromAddress(pollAddress) {
