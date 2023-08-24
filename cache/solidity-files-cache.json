@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/fgk/dapps/decvote/contracts/Voting.sol": {
-      "lastModificationDate": 1692565933517,
-      "contentHash": "acd5c0eaecc08c846a35e295264b5f82",
+      "lastModificationDate": 1692910828265,
+      "contentHash": "14cf275fc880758f548c9114a42ae504",
       "sourceName": "contracts/Voting.sol",
       "solcConfig": {
         "version": "0.8.19",

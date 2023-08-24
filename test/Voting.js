@@ -39,7 +39,7 @@ describe("Voting", function () {
 
   async function deployFixture() {
     const contractFactory = await ethers.getContractFactory("Poll");
-    const contractInstance = await contractFactory.deploy("Test", ["1", "2", "3"], 5);
+    const contractInstance = await contractFactory.deploy("Test", ["1", "2", "3"], 5, []);
     return { contractInstance };
   }
 

@@ -32,7 +32,7 @@ async function makePoll(question, options) {
     const pollIndex = await contract.getPollsLength()
     // The new poll index is going to be the current length of the polls array
     console.log("Poll index: ", pollIndex)
-    const tx = await contract.makePoll(question, options, 0)
+    const tx = await contract.makePoll(question, options, 0, [])
     await tx.wait()
     const pollAddress = await contract.getPoll(pollIndex)
     console.log("Created poll at address: ", pollAddress, " with index: ", pollIndex, ".\tQuestion: ", question, "\tOptions: ", options, "\tUnlock Time: ", 0)

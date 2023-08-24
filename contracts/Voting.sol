@@ -27,15 +27,23 @@ contract Poll {
     mapping(address => bool) hasVoted;
     mapping(string => bool) isOption;
 
+    address[] managers;
+
     constructor(
         string memory _question,
         string[] memory _options,
-        uint256 _timelock
+        uint256 _timelock,
+        address[] memory _managers
     ) {
         require(
             _options.length <= 32,
             "A poll can not have more than 32 options"
         );
+        require(
+            _options.length >= 2,
+            "A poll must have at least 2 options to be valid"
+        );
+        managers = _managers;
         owner = msg.sender;
         options = _options;
         question = _question;
@@ -53,6 +61,21 @@ contract Poll {
     modifier onlyOnce() {
         require(!hasVoted[msg.sender], "Already voted");
         _;
+    }
+
+    modifier onlyManager() {
+        if (managers.length != 0) {
+            bool isManager = false;
+            for (uint256 i = 0; i < managers.length; i++) {
+                if (msg.sender == managers[i]) {
+                    isManager = true;
+                }
+            }
+            require(isManager, "Only managers can do this");
+            _;
+        } else {
+            _;
+        }
     }
 
     modifier hasNotEnded() {
@@ -86,7 +109,7 @@ contract Poll {
 
     function vote(
         string memory _option
-    ) external onlyOnce notPaused hasNotEnded returns (bool) {
+    ) external onlyOnce notPaused hasNotEnded onlyManager returns (bool) {
         require(isOption[_option], "Not a valid option");
         votes[_option]++;
 
@@ -174,9 +197,9 @@ contract PollFactory {
         string[] memory _options,
         uint256 _timelock
     ) external returns (address) {
-        Poll poll = new Poll(_question, _options, _timelock);
+        Poll poll = new Poll(_question, _options, _timelock, new address[](0));
         polls.push(poll);
-        console.log("----- poll:", address(poll));
+        console.log("Created a poll at address: ", address(poll));
         emit PollCreated(address(poll));
         return address(poll);
     }
